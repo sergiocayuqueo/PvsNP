@@ -9,13 +9,11 @@
 
 ## Abstract
 
-The $\mathcal{P}$ versus $\mathcal{NP}$ problem stands as the foundational open question in theoretical computer science, structural complexity theory, and mathematical logic. Proposed by Stephen Cook (1971) and Leonid Levin (1973), it queries whether every decision problem whose affirmative answers can be verified in polynomial time can also be solved in polynomial time:
+The **P** versus **NP** problem stands as the foundational open question in theoretical computer science, structural complexity theory, and mathematical logic. Proposed by Stephen Cook (1971) and Leonid Levin (1973), it queries whether every decision problem whose affirmative answers can be verified in polynomial time can also be solved in polynomial time:
 
-$$
-\mathcal{P} \stackrel{?}{=} \mathcal{NP}
-$$
+$$P \stackrel{?}{=} NP$$
 
-This repository provides a PhD-level theoretical reference framework paired with an empirical laboratory analyzing structural complexity foundations, non-relativizing proof barriers, and average-case phase transitions in random $k$-SAT.
+This repository provides a theoretical reference framework paired with an empirical laboratory analyzing structural complexity foundations, non-relativizing proof barriers, and average-case phase transitions in random $k$-SAT.
 
 ---
 
@@ -28,31 +26,25 @@ Let $\Sigma = \{0, 1\}$ be the binary alphabet. A **language** $L \subseteq \Sig
 #### Deterministic Turing Machine (DTM)
 A DTM is defined as a 7-tuple $M = (Q, \Sigma, \Gamma, \delta, q_0, q_{\text{accept}}, q_{\text{reject}})$, where $\delta: Q \times \Gamma \to Q \times \Gamma \times \{L, R\}$ is the deterministic transition function.
 
-The complexity class $\mathcal{P}$ is defined as:
+The complexity class **P** is defined as:
 
-$$
-\mathcal{P} = \bigcup_{k \ge 1} \text{DTIME}\left(n^k\right)
-$$
+$$P = \bigcup_{k \ge 1} \text{DTIME}(n^k)$$
 
-where $L \in \text{DTIME}(f(n))$ if there exists a DTM $M$ that decides $L$ in at most $\mathcal{O}(f(n))$ steps for all inputs of length $n = |x|$.
+where $L \in \text{DTIME}(f(n))$ if there exists a DTM $M$ that decides $L$ in at most $O(f(n))$ steps for all inputs of length $n = |x|$.
 
 #### Non-Deterministic Turing Machine (NDTM)
 An NDTM replaces the transition function with a relation $\delta \subseteq (Q \times \Gamma) \times (Q \times \Gamma \times \{L, R\})$.
 
-The complexity class $\mathcal{NP}$ can be formulated via two equivalent definitions:
+The complexity class **NP** can be formulated via two equivalent definitions:
 
 1. **Non-Deterministic Time**:
 
-$$
-\mathcal{NP} = \bigcup_{k \ge 1} \text{NTIME}\left(n^k\right)
-$$
+$$NP = \bigcup_{k \ge 1} \text{NTIME}(n^k)$$
 
 2. **Polynomial-Time Verifier**:
-A language $L \in \mathcal{NP}$ if and only if there exists a deterministic verifier $V$ and a polynomial $p(n)$ such that:
+A language $L \in NP$ if and only if there exists a deterministic verifier $V$ and a polynomial $p(n)$ such that:
 
-$$
-x \in L \iff \exists w \in \Sigma^* \quad \text{with} \quad |w| \le p(|x|) \quad \text{such that} \quad V(x, w) = 1
-$$
+$$x \in L \iff \exists w \in \Sigma^* \quad \text{with} \quad |w| \le p(|x|) \quad \text{such that} \quad V(x, w) = 1$$
 
 where $w$ represents the polynomial-size certificate (proof).
 
@@ -79,27 +71,21 @@ where $w$ represents the polynomial-size certificate (proof).
 
 A language $A \subseteq \Sigma^*$ is **Karp-reducible** to $B \subseteq \Sigma^*$, denoted $A \le_p B$, if there exists a polynomial-time computable function $f: \Sigma^* \to \Sigma^*$ such that:
 
-$$
-\forall x \in \Sigma^*, \quad x \in A \iff f(x) \in B
-$$
+$$\forall x \in \Sigma^*, \quad x \in A \iff f(x) \in B$$
 
 #### Definition: NP-Completeness
-A language $B$ is $\mathcal{NP}$-complete if:
-1. $B \in \mathcal{NP}$, and
-2. $\forall A \in \mathcal{NP}, \quad A \le_p B$ ($\mathcal{NP}$-hardness).
+A language $B$ is **NP-complete** if:
+1. $B \in NP$, and
+2. $\forall A \in NP, \quad A \le_p B$ (**NP-hardness**).
 
 #### Theorem (Cook 1971, Levin 1973)
 
-$$
-\text{SAT} = \{ \langle \phi \rangle \mid \phi \text{ is a satisfiable Boolean formula} \} \text{ is } \mathcal{NP}\text{-complete.}
-$$
+$$\text{SAT} = \{ \langle \phi \rangle \mid \phi \text{ is a satisfiable Boolean formula} \} \text{ is NP-complete.}$$
 
 #### Proof Sketch (Arithmetization of Computation)
-For any $L \in \mathcal{NP}$ accepted by an NDTM $M$ in time $n^k$, we construct a Boolean formula $\Phi_{M, x}$ of size $\mathcal{O}(n^{2k})$ representing an $n^k \times n^k$ computation grid. Variables $T_{i, j, q}$ encode tape cell contents, head positions, and state transitions at time $i$ and position $j$:
+For any $L \in NP$ accepted by an NDTM $M$ in time $n^k$, we construct a Boolean formula $\Phi_{M, x}$ of size $O(n^{2k})$ representing an $n^k \times n^k$ computation grid. Variables $T_{i, j, q}$ encode tape cell contents, head positions, and state transitions at time $i$ and position $j$:
 
-$$
-\Phi_{M, x} = \phi_{\text{cell}} \land \phi_{\text{start}} \land \phi_{\text{move}} \land \phi_{\text{accept}}
-$$
+$$\Phi_{M, x} = \phi_{\text{cell}} \land \phi_{\text{start}} \land \phi_{\text{move}} \land \phi_{\text{accept}}$$
 
 Satisfiability of $\Phi_{M, x}$ directly mirrors the existence of an accepting computation branch in $M(x)$, establishing $L \le_p \text{SAT}$.
 
@@ -107,7 +93,7 @@ Satisfiability of $\Phi_{M, x}$ directly mirrors the existence of an accepting c
 
 ## 2. Theoretical Barriers to Separation
 
-Three major formal barrier theorems demonstrate why standard mathematical techniques fail to resolve $\mathcal{P} \stackrel{?}{=} \mathcal{NP}$.
+Three major formal barrier theorems demonstrate why standard mathematical techniques fail to resolve $P \stackrel{?}{=} NP$.
 
 ```
 +-------------------------------------------------------------------------+
@@ -127,27 +113,23 @@ Three major formal barrier theorems demonstrate why standard mathematical techni
 ### 2.1 The Relativization Barrier
 **Theorem (Baker, Gill, Solovay, 1975)**: There exist oracle sets $A, B \subset \Sigma^*$ such that:
 
-$$
-\mathcal{P}^A = \mathcal{NP}^A \quad \text{and} \quad \mathcal{P}^B \neq \mathcal{NP}^B
-$$
+$$P^A = NP^A \quad \text{and} \quad P^B \neq NP^B$$
 
 *Implication*: Techniques that relativize (remain invariant under oracle access) cannot resolve the problem. This rules out standard diagonalizations.
 
 ### 2.2 The Natural Proofs Barrier
 **Theorem (Razborov & Rudich, 1997)**: Let $\mathcal{F}_n$ be the set of all Boolean functions $f: \{0,1\}^n \to \{0,1\}$. A combinatorial property $C_n \subseteq \mathcal{F}_n$ is **Natural** if it satisfies:
 1. **Largeness**: $|C_n| / |\mathcal{F}_n| \ge 2^{-c n}$ for constant $c \ge 0$.
-2. **Constructivity**: Deciding $f \in C_n$ is computable in $2^{\mathcal{O}(n)}$ time.
+2. **Constructivity**: Deciding $f \in C_n$ is computable in $2^{O(n)}$ time.
 
-*Statement*: If strong pseudorandom function generators exist, **no Natural Property can prove super-polynomial circuit lower bounds** for functions in $\mathcal{NP}$.
+*Statement*: If strong pseudorandom function generators exist, **no Natural Property can prove super-polynomial circuit lower bounds** for functions in **NP**.
 
 ### 2.3 The Algebrization Barrier
 **Theorem (Aaronson & Wigderson, 2008)**: For low-degree polynomial extensions $\tilde{A}$ over finite fields $\mathbb{F}_q$, there exist algebraic oracles $A, B$ such that:
 
-$$
-\mathcal{P}^{\tilde{A}} = \mathcal{NP}^{\tilde{A}} \quad \text{and} \quad \mathcal{P}^{\tilde{B}} \neq \mathcal{NP}^{\tilde{B}}
-$$
+$$P^{\tilde{A}} = NP^{\tilde{A}} \quad \text{and} \quad P^{\tilde{B}} \neq NP^{\tilde{B}}$$
 
-*Implication*: Non-relativizing techniques based on arithmetization (e.g., $\text{IP} = \text{PSPACE}$) are insufficient to separate $\mathcal{P}$ and $\mathcal{NP}$.
+*Implication*: Non-relativizing techniques based on arithmetization (e.g., $\text{IP} = \text{PSPACE}$) are insufficient to separate **P** and **NP**.
 
 ---
 
@@ -158,35 +140,27 @@ Average-case hardness in random $k$-SAT is governed by phase transition phenomen
 ### 3.1 Random 3-SAT Formulation
 Consider a random 3-CNF formula $\phi$ with $n$ variables and $m$ clauses. Define the density ratio:
 
-$$
-\alpha = \frac{m}{n}
-$$
+$$\alpha = \frac{m}{n}$$
 
 ### 3.2 Satisfiability Threshold
 In the limit $n \to \infty$, satisfiability exhibits a sharp non-analyticity at a critical threshold:
 
-$$
-\lim_{n \to \infty} \Pr[\phi \text{ is SAT}] = \begin{cases} 1 & \text{if } \alpha < \alpha_c \\ 0 & \text{if } \alpha > \alpha_c \end{cases}
-$$
+$$\lim_{n \to \infty} \Pr[\phi \text{ is SAT}] = \begin{cases} 1 & \text{if } \alpha < \alpha_c \\ 0 & \text{if } \alpha > \alpha_c \end{cases}$$
 
 For 3-SAT, cavity method derivations and mathematical bounds fix the critical point at:
 
-$$
-\alpha_c \approx 4.267
-$$
+$$\alpha_c \approx 4.267$$
 
 For general $k$-SAT (Ding, Sly, Sun, 2015):
 
-$$
-\alpha_c(k) = 2^k \ln 2 - \frac{1 + \ln 2}{2} + o(1)
-$$
+$$\alpha_c(k) = 2^k \ln 2 - \frac{1 + \ln 2}{2} + o(1)$$
 
 ### 3.3 Solution Space Topology (1RSB)
 As $\alpha$ approaches $\alpha_c$, the geometry of satisfying assignments in $\{0,1\}^n$ undergoes structural phase transitions:
 
-1. **Unclustered Phase ($\alpha < 3.86$)**: Solutions form a single convex-like cluster. Search is linear $\mathcal{O}(n)$.
+1. **Unclustered Phase ($\alpha < 3.86$)**: Solutions form a single convex-like cluster. Search is linear $O(n)$.
 2. **Clustering / 1RSB Phase ($3.86 \le \alpha < 4.267$)**: Solutions shatter into exponentially many isolated clusters.
-3. **Rigidity / Frozen Phase ($\alpha \approx 4.25$)**: Variables freeze into fixed truth values; search runtime scales exponentially $\mathcal{O}(2^{\gamma n})$.
+3. **Rigidity / Frozen Phase ($\alpha \approx 4.25$)**: Variables freeze into fixed truth values; search runtime scales exponentially $O(2^{\gamma n})$.
 4. **UNSAT Phase ($\alpha > 4.267$)**: The solution space disappears.
 
 ---
@@ -196,16 +170,12 @@ As $\alpha$ approaches $\alpha_c$, the geometry of satisfying assignments in $\{
 ### 4.1 Geometric Complexity Theory (GCT)
 Mulmuley and Sohoni (2001) reformulate algebraic separations (e.g., $\text{VP} \stackrel{?}{\neq} \text{VNP}$) using algebraic geometry and representation theory, searching for multiplicity obstructions in orbit closures:
 
-$$
-\text{Perm}_m^* \notin \overline{\text{GL}_{n^2}(\mathbb{C}) \cdot \text{Det}_n}
-$$
+$$\text{Perm}_m^* \notin \overline{\text{GL}_{n^2}(\mathbb{C}) \cdot \text{Det}_n}$$
 
 ### 4.2 Fine-Grained Complexity & SETH
 Conditional lower bounds rely on hypotheses like the **Strong Exponential Time Hypothesis (SETH)**:
 
-$$
-\forall \epsilon > 0, \exists k \ge 3 \quad \text{such that } k\text{-SAT cannot be solved in } \mathcal{O}\left((2 - \epsilon)^n\right) \text{ time.}
-$$
+$$\forall \epsilon > 0, \exists k \ge 3 \quad \text{such that } k\text{-SAT cannot be solved in } O\left((2 - \epsilon)^n\right) \text{ time.}$$
 
 ---
 
@@ -353,7 +323,7 @@ if __name__ == "__main__":
 
 ---
 
-> *"If $\mathcal{P} = \mathcal{NP}$, then we would live in a world where every beautiful poem could be written by a machine as easily as it is read by a person."* — **Scott Aaronson**
+> *"If **P = NP**, then we would live in a world where every beautiful poem could be written by a machine as easily as it is read by a person."* — **Scott Aaronson**
 
 ---
 
